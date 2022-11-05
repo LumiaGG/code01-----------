@@ -32,7 +32,7 @@ namespace SystemTrayApp
             int power = 0;
             double usedMem = 0;
             double availableMem = 1;
-            int usedMegProcentage = 0;
+            int usedMemProcentage = 0;
             foreach (var hardware in _computer.Hardware)
             {
                 if (hardware.HardwareType == HardwareType.CPU)
@@ -69,9 +69,9 @@ namespace SystemTrayApp
                     }
                 }
             }
-            usedMegProcentage = (int)(usedMem * 100 / (usedMem + availableMem));
+            usedMemProcentage = (int)(usedMem * 100 / (usedMem + availableMem));
             return "性能表现："+GetPerformanceMode() 
-                + "\n内存占用：" + usedMegProcentage + " %" 
+                + "\n内存占用：" + usedMemProcentage + " %" 
                 + "\n温度(CPU)：" + temp + " ℃\n功率(CPU)：" + power + " W";
         }
 

@@ -46,7 +46,7 @@ namespace SystemTrayApp
             string text = hardwareMonitor.GetPerformanceData();
             if (text.Length > 63)
             {
-                text = text.Substring(0, 64);
+                text = text.Substring(0, 63);
             }
             this.SystemTrayIcon.Text = text;
         }
