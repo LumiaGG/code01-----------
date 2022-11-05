@@ -43,12 +43,11 @@ namespace SystemTrayApp
                 return;
             }
             lastCheckSensorTime = Millis();
-            string text = hardwareMonitor.GetPerformanceData();
-            if (text.Length > 63)
-            {
-                text = text.Substring(0, 63);
-            }
+            string text = "性能表现：" + hardwareMonitor.GetPerformanceMode();
             this.SystemTrayIcon.Text = text;
+            SensorData sensorData = hardwareMonitor.GetPerformanceData();
+            this.SystemTrayIcon.Text +=  "\n内存占用：" + sensorData.usedMemProcentage + " %"
+                + "\n温度(CPU)：" + sensorData.temp + " ℃\n功率(CPU)：" + sensorData.power + " W"; ;
         }
 
         private void ContextMenuExit(object sender, EventArgs e)

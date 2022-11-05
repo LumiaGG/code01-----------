@@ -5,6 +5,12 @@ using System.Threading;
 
 namespace SystemTrayApp
 {
+    public class SensorData
+    {
+        public int temp;
+        public int power;
+        public int usedMemProcentage;
+    }
     internal sealed class HardwareMonitorServer : IDisposable
     {
         private readonly Computer _computer;
@@ -26,13 +32,11 @@ namespace SystemTrayApp
             }
         }
 
-        public string GetPerformanceData()
+        public SensorData GetPerformanceData()
         {            
-            int temp = 0;
-            int power = 0;
+            SensorData sensorData = new SensorData();
             double usedMem = 0;
             double availableMem = 1;
-            int usedMemProcentage = 0;
             foreach (var hardware in _computer.Hardware)
             {
                 if (hardware.HardwareType == HardwareType.CPU)
@@ -42,12 +46,12 @@ namespace SystemTrayApp
                     {
                         if (sensor.SensorType == SensorType.Temperature && sensor.Value.HasValue && sensor.Name == "CPU Package")
                         {
-                            temp = (int)sensor.Value.GetValueOrDefault();
+                            sensorData.temp = (int)sensor.Value.GetValueOrDefault();
                             continue;
                         }
                         if (sensor.SensorType == SensorType.Power && sensor.Value.HasValue && sensor.Name == "CPU Package")
                         {
-                            power = (int)sensor.Value.GetValueOrDefault();
+                            sensorData.power = (int)sensor.Value.GetValueOrDefault();
                             continue;
                         }
                     }
@@ -69,10 +73,8 @@ namespace SystemTrayApp
                     }
                 }
             }
-            usedMemProcentage = (int)(usedMem * 100 / (usedMem + availableMem));
-            return "性能表现："+GetPerformanceMode() 
-                + "\n内存占用：" + usedMemProcentage + " %" 
-                + "\n温度(CPU)：" + temp + " ℃\n功率(CPU)：" + power + " W";
+            sensorData.usedMemProcentage = (int)(usedMem * 100 / (usedMem + availableMem));
+            return sensorData;
         }
 
         public string GetPerformanceMode()
