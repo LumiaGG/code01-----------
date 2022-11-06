@@ -17,8 +17,8 @@
             // 
             this.SystemTrayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.SystemTrayIcon.Visible = true;
-            this.SystemTrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.SystemTrayIconDoubleClick);
-            this.SystemTrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SystemTrayIconMouseMove);
+            this.SystemTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SystemTrayIconMouceDown);
+            //this.SystemTrayIcon.MouseMove += new System.Windows.Forms.MouseEventHandler(this.SystemTrayIconMouseMove);
         }
 
         private System.Windows.Forms.NotifyIcon SystemTrayIcon;
