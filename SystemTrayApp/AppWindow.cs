@@ -116,6 +116,11 @@ namespace SystemTrayApp
             {
                 performanceMode = hardwareMonitor.GetPerformanceMode();
             }
+            if (this.SystemTrayIcon.ContextMenuStrip.Visible)
+            {
+                Console.WriteLine("ContextMenuStrip.Visible");
+                (SystemTrayIcon.ContextMenuStrip.Items[0] as ToolStripMenuItem).Text = "性能表现：" + performanceMode.name;
+            }
             switch (performanceMode.index)
             {
                 case 0:
