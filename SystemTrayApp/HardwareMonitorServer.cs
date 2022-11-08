@@ -31,7 +31,11 @@ namespace SystemTrayApp
                 //ignore closing errors
             }
         }
-
+        public class PerformanceMode
+        {
+            public int index = -1;
+            public string name = "未知";
+        }
         public SensorData GetPerformanceData()
         {            
             SensorData sensorData = new SensorData();
@@ -77,10 +81,10 @@ namespace SystemTrayApp
             return sensorData;
         }
 
-        public string GetPerformanceMode()
+        public PerformanceMode GetPerformanceMode()
         {
             string text = "ACPI\\PNP0C14\\0_3";
-            string mode = "未知";
+            PerformanceMode mode = new PerformanceMode();
             try
             {
                 ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher("root\\WMI", "SELECT * FROM AcpiTest_QULong");
@@ -98,13 +102,19 @@ namespace SystemTrayApp
                         uint num = (uint)propertyData.Value;
                         if (num == 1U)
                         {
-                            return "静音";
+                            mode.index = 0;
+                            mode.name = "静音";
+                            return mode;
                         }
                         if (num != 2U)
                         {
-                            return "平衡";
+                            mode.index = 1;
+                            mode.name = "平衡";
+                            return mode;
                         }
-                        return "性能";
+                        mode.index = 2;
+                        mode.name = "性能";
+                        return mode;
                     }
                 }
             }

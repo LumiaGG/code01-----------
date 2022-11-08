@@ -121,4 +121,16 @@
   <data name="Default" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Default.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Mode0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\mode0.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mode1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\awkli-7ln9b-001.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mode2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\agqyb-r2kcs-001.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mode3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\alpde-aqzqd-001.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

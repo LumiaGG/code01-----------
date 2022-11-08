@@ -69,5 +69,45 @@ namespace SystemTrayApp.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon Mode0 {
+            get {
+                object obj = ResourceManager.GetObject("Mode0", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon Mode1 {
+            get {
+                object obj = ResourceManager.GetObject("Mode1", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon Mode2 {
+            get {
+                object obj = ResourceManager.GetObject("Mode2", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Icon Mode3 {
+            get {
+                object obj = ResourceManager.GetObject("Mode3", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

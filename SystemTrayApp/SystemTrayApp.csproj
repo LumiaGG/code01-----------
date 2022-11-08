@@ -63,6 +63,7 @@
       <DependentUpon>AppWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="HardwareMonitorServer.cs" />
+    <Compile Include="KeyboardHook.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AppWindow.resx">
@@ -94,6 +95,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Default.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\awkli-7ln9b-001.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\agqyb-r2kcs-001.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alpde-aqzqd-001.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mode0.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

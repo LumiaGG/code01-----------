@@ -2,76 +2,155 @@
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace SystemTrayApp
 {
-    public partial class AppWindow 
+    public partial class AppWindow
     {
 
         HardwareMonitorServer hardwareMonitor = new HardwareMonitorServer();
+        SensorData sensorData = new SensorData();
+        HardwareMonitorServer.PerformanceMode performanceMode = new HardwareMonitorServer.PerformanceMode();
+        System.Timers.Timer timer = new System.Timers.Timer(1000);
+        System.Timers.Timer timerFnX = new System.Timers.Timer(100);
+        Icon mode0 = null;
+        Icon mode1 = null;
+        Icon mode2 = null;
+        Icon mode3 = null;
+
+        KeyboardHook keyboardHook = new KeyboardHook();
+
 
         public AppWindow()
         {
             InitializeComponent();
 
-            // To provide your own custom icon image, go to:
-            //   1. Project > Properties... > Resources
-            //   2. Change the resource filter to icons
-            //   3. Remove the Default resource and add your own
-            //   4. Modify the next line to Properties.Resources.<YourResource>
-            //this.Icon = Properties.Resources.Default;
-            this.SystemTrayIcon.Icon = Properties.Resources.Default;
+            mode0 = GetIcon("Mode0");
+            mode1 = GetIcon("Mode1");
+            mode2 = GetIcon("Mode2");
+            mode3 = GetIcon("Mode3");
 
-            // Change the Text property to the name of your application
+            initTrayIcon();
+
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(TimerEvent);
+            timer.Enabled = true;
+
+            timerFnX.Elapsed += new System.Timers.ElapsedEventHandler(TimerFnXEvent);
+            timerFnX.AutoReset = false;
+
+            keyboardHook.FNXEvent += new FNXEventHandler(FnXEvent);
+            keyboardHook.Start();
+
+            UpdateIcon(true);
+        }
+
+        private void initTrayIcon()
+        {
+            this.SystemTrayIcon.Icon = mode0;
             this.SystemTrayIcon.Visible = true;
+            this.SystemTrayIcon.ContextMenuStrip = new ContextMenuStrip();
+            this.SystemTrayIcon.ContextMenuStrip.Items.Add("性能表现", null, ContextMenuNone);
+            this.SystemTrayIcon.ContextMenuStrip.Items.Add("内存占用", null, ContextMenuNone);
+            this.SystemTrayIcon.ContextMenuStrip.Items.Add("温度(CPU)", null, ContextMenuNone);
+            this.SystemTrayIcon.ContextMenuStrip.Items.Add("功率(CPU)", null, ContextMenuNone);
+            ToolStripMenuItem settingsItem = new ToolStripMenuItem();
+            settingsItem.Text = "设置";
+            settingsItem.DropDownItems.Add("Exit", null, ContextMenuExit);
+            this.SystemTrayIcon.ContextMenuStrip.Items.Add(settingsItem);
+        }
 
-            // Modify the right-click menu of your system tray icon here
-            ContextMenu menu = new ContextMenu();
-            menu.MenuItems.Add("性能表现：", ContextMenuNone);
-            menu.MenuItems.Add("内存占用：", ContextMenuNone);
-            menu.MenuItems.Add("温度(CPU)：", ContextMenuNone);
-            menu.MenuItems.Add("功率(CPU)：", ContextMenuNone);
-            menu.MenuItems.Add("Exit", ContextMenuExit);
-            this.SystemTrayIcon.ContextMenu = menu;
+        private void FnXEvent()
+        {
+            timerFnX.Start();
+        }
+
+        public void TimerEvent(object source, System.Timers.ElapsedEventArgs e)
+        {
+            Console.WriteLine("timer timeout");
+            if (this.SystemTrayIcon.ContextMenuStrip.Visible)
+            {
+                UpdateMenu();
+                UpdateIcon(false);
+            }
+            else
+            {
+                timer.Stop();
+            }
+        }
+
+        public void TimerFnXEvent(object source, System.Timers.ElapsedEventArgs e)
+        {
+            Console.WriteLine("TimerFnXEvent");
+            timerFnX.Stop();
+            UpdateIcon(true);
         }
 
         private void SystemTrayIconMouceDown(object sender, MouseEventArgs e)
         {
-            showMenu();
+            ShowMenu();
+            timer.Start();
         }
 
-        private void SystemTrayIconMouseMove(object sender, MouseEventArgs e)
+        private void ShowMenu()
         {
-        }
-
-        private void showMenu()
-        {
-            SensorData sensorData = hardwareMonitor.GetPerformanceData();
-            SystemTrayIcon.ContextMenu.MenuItems[0].Text = "性能表现：" + hardwareMonitor.GetPerformanceMode();
-            SystemTrayIcon.ContextMenu.MenuItems[1].Text = "内存占用：" + sensorData.usedMemProcentage + " %";
-            SystemTrayIcon.ContextMenu.MenuItems[2].Text = "温度(CPU)：" + sensorData.temp + " ℃";
-            SystemTrayIcon.ContextMenu.MenuItems[3].Text = "功率(CPU)：" + sensorData.power + " W";
+            UpdateMenu();
             MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
             mi.Invoke(SystemTrayIcon, null);
+
+            UpdateIcon(false);
         }
 
-
-        private double PointDistance(Point a, Point b)
+        private void UpdateMenu()
         {
-            return Math.Sqrt((Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2)));
+            sensorData = hardwareMonitor.GetPerformanceData();
+            performanceMode = hardwareMonitor.GetPerformanceMode();
+            (SystemTrayIcon.ContextMenuStrip.Items[0] as ToolStripMenuItem).Text = "性能表现：" + performanceMode.name;
+            (SystemTrayIcon.ContextMenuStrip.Items[1] as ToolStripMenuItem).Text = "内存占用：" + sensorData.usedMemProcentage + " %";
+            (SystemTrayIcon.ContextMenuStrip.Items[2] as ToolStripMenuItem).Text = "温度(CPU)：" + sensorData.temp + " ℃";
+            (SystemTrayIcon.ContextMenuStrip.Items[3] as ToolStripMenuItem).Text = "功率(CPU)：" + sensorData.power + " W";
+        }
+
+        private void UpdateIcon(bool updatePerformanceMode)
+        {
+            if (updatePerformanceMode)
+            {
+                performanceMode = hardwareMonitor.GetPerformanceMode();
+            }
+            switch (performanceMode.index)
+            {
+                case 0:
+                    this.SystemTrayIcon.Icon = mode1;
+                    break;
+                case 1:
+                    this.SystemTrayIcon.Icon = mode2;
+                    break;
+                case 2:
+                    this.SystemTrayIcon.Icon = mode3;
+                    break;
+                default:
+                    this.SystemTrayIcon.Icon = mode0;
+                    break;
+            }
         }
 
         private void ContextMenuExit(object sender, EventArgs e)
         {
+            keyboardHook.Stop();
+            timer.Stop();
             this.SystemTrayIcon.Visible = false;
             Application.Exit();
             Environment.Exit(0);
         }
         private void ContextMenuNone(object sender, EventArgs e)
         {
+
         }
 
+        private System.Drawing.Icon GetIcon(string name)
+        {
+            object obj = Properties.Resources.ResourceManager.GetObject(name);
+            return ((System.Drawing.Icon)(obj));
+        }
         private long Millis()
         {
             return (DateTime.Now.ToUniversalTime().Ticks - 621355968000000000) / 10000;
